@@ -140,21 +140,24 @@ class mysql_controller:
             columns = ','.join(columns)
 
         cursor = self._accessor.cursor()
-        def exe_qurey(cursor, query):
+
+        def exe_qurey(query):
+            cursor = self._accessor.cursor()
             cursor.execute(query)
+            self._accessor.commit()
             self._saved_query = query
             self._query_results = cursor.fetchall()
-            self._query_item = cursor.fetchone()
+            self._query_item = self._query_results[0]
 
         
         if self._action == self._query and raw == "":
             query = ("SELECT {} FROM {} {}".format(columns, table, mods))
-            exe_qurey(cursor,query)
+            exe_qurey(query)
         elif self._action == self._raw:
             if raw != "":
-                exe_qurey(cursor,raw)
+                exe_qurey(raw)
             else:
-                exe_qurey(cursor,self._saved_query)
+                exe_qurey(self._saved_query)
         elif self._action == self._insert:
             for value_list in self.list_rows():
                 if bool(re.search(r'[A-Za-z0-9]',str(value_list))) == False:
@@ -184,7 +187,7 @@ class mysql_controller:
 
     def normalize_columns(self): # *array
         modified_array = self._config['columns']
-        if modified_array[0] == '' :
+        if modified_array == '*' or modified_array[0] == '' :
             return self
 
 
@@ -239,11 +242,13 @@ class mysql_controller:
         if columns == None:
             columns = self._config['columns']
         else:
+            self._config['columns'] = columns
             self.normalize_columns()
         
         if rows == None:
             rows = self._config['rows']
         else:
+            self._config['rows'] = rows
             self.normalize_rows()
 
         if table == None or table == '':
