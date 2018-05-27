@@ -21,6 +21,7 @@ pwd = os.popen('pwd').read().strip()
 csv = csv_parser(pwd+"/car_stock.csv").parse_csv_file()
 # Open the csv file and create the csv object for later ues with mysql
 
+
 images = [
     'https://s1.cdn.autoevolution.com/images/models/OPEL_Vectra-GTS-2005_main.jpg',
     'http://www.opel.com/content/dam/Opel/OpelCorporate/corporate/nscwebsite/en/00_Home/252x142/'
