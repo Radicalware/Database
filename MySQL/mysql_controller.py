@@ -267,14 +267,12 @@ class mysql_controller:
     
     def ret_columns(self):
         cursor = (self._accessor.cursor())
-        print(self._config['table'])
         cursor.execute("SHOW COLUMNS FROM {}".format(self._config['table']))
         return [x[0] for x in cursor.fetchall()]
 
     
     def yield_columns(self):
         cursor = (self._accessor.cursor())
-        print(self._config['table'])
         cursor.execute("SHOW COLUMNS FROM {}".format(self._config['table'])) 
         for i in [x [0] for x in cursor.fetchall()]:
             yield i
