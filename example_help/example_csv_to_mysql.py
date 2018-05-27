@@ -58,12 +58,17 @@ mysql = mysql_controller(mysql_login).connect_database()
 
 # drop the database named rest_pyramid if you have one already created
 try:
-    mysql("DROP TABLE car")
+    mysql.database('rest_pyramid').connect_database() # connect to new database
+    mysql("DROP TABLE car") # delete car table
 except:
-    print("You didn't have the table car in your 'rest_pyramid' database")
+    print("You didn't have the table car table and/or 'rest_pyramid' database")
+    try:
+        mysql('CREATE DATABASE rest_pyramid').database('rest_pyramid').connect_database()
+    except:
+        print('You have the rest_pyramid database')
 
 
-mysql('CREATE DATABASE rest_pyramid').database('rest_pyramid').connect_database()
+
 # use __call__ for misc functions, here it is used to create a database
 # we then select that database and then connect to it
 # the first time we used connect_database() was to log into Mysql
@@ -111,7 +116,7 @@ print (mysql.action(columns="brand,name",mods="WHERE pry_id = 15").query_results
 # be the first item in the list
 
 print (mysql.saved_query()) # show last used query
-
+print(str(mysql)) # use the __str__ as a shortcut
 
 print (mysql.raw().action(raw=str(mysql)).query_item()) 
 # raw is used for using a raw query (without the help of the mysql_parser)
@@ -148,3 +153,9 @@ while mysql > count-1:
     # within each loop we set each column value to a random uuid and a random image
     # then we set the where clause to reflect our count
     # by the end of this loop, every row will have a random uuid and a random image added to their values
+
+
+print(mysql.query().action(columns='*',mods=' WHERE pry_id = 5').query_item())
+# here I decided to just add in the columns I wanted in the action **kwargs
+# and you will see here on eof the items you updated with the two new columns
+# and the new values placed into those
