@@ -63,7 +63,7 @@ mysql = mysql_controller(mysql_login).connect_database()
 # at a clean slate and there is no table named car inside.
 if 'rest_pyramid' in [x[0] for x in mysql('show databases').query_results()]:
     mysql.database('rest_pyramid').connect_database() 
-    if 'rest_pyramid' not in [x[0] for x in mysql('show tables in rest_pyramid').query_results()]:
+    if 'car' in [x[0] for x in mysql('show tables in rest_pyramid').query_results()]:
         mysql("DROP TABLE car")
 else:
     mysql('CREATE DATABASE rest_pyramid').database('rest_pyramid').connect_database()
