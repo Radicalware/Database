@@ -57,23 +57,16 @@ mysql = mysql_controller(mysql_login).connect_database()
 # We __init__ with teh mysql_login and then connect to mysql
 
 
-# drop the database named rest_pyramid if you have one already created
-try:
-    mysql.database('rest_pyramid').connect_database() # connect to new database
-    mysql("DROP TABLE car") # delete car table
-except:
-    print("You didn't have the table car table and/or 'rest_pyramid' database")
-    try:
-        mysql('CREATE DATABASE rest_pyramid').database('rest_pyramid').connect_database()
-    except:
-        print('You have the rest_pyramid database')
-
-
-
-# use __call__ for misc functions, here it is used to create a database
-# we then select that database and then connect to it
-# the first time we used connect_database() was to log into Mysql
-# we had to use it again becaues we changed from having no database selected to now having one selected
+# Don't worry about this first if/else statment
+# a full use case of what is being done will be described later
+# here I am just making sure that the database "rest_pyramid" is
+# at a clean slate and there is no table named car inside.
+if 'rest_pyramid' in [x[0] for x in mysql('show databases').query_results()]:
+    mysql.database('rest_pyramid').connect_database() 
+    if 'rest_pyramid' not in [x[0] for x in mysql('show tables in rest_pyramid').query_results()]:
+        mysql("DROP TABLE car")
+else:
+    mysql('CREATE DATABASE rest_pyramid').database('rest_pyramid').connect_database()
 
 
 create_table = """
